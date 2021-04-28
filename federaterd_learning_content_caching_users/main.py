@@ -174,40 +174,5 @@ if __name__ == '__main__':
     # plt.savefig(f"./save/{args.dataset}-CachingEfficiency.png")
     plt.show()
 
-    # plt cachesize 50 cache_efficiency vs communication rounds
-    print('\n Caching Efficiency vs Communication Rounds')
-    recommend_movies_c50 = dict([(k, []) for k in np.arange(1, args.epochs+1)])
-    cache_efficiency_c50 = np.zeros(args.epochs + 1)
-    for global_round in np.arange(1, args.epochs+1):
-        for idx in range(args.clients_num):
-            test_dataset_i = data_set[users_group_test[idx]]
-            user_movie_i = convert(test_dataset_i, max(sample['movie_id']))
-            recommend_list = recommend(user_movie_i, test_dataset_i, w_all_epochs[global_round-1][idx])
-            recommend_list = count_top_items(50, recommend_list)
-            recommend_movies_c50[global_round].append(list(recommend_list))
-
-        # FPCC
-        recommend_movies_c50[global_round] = count_top_items(50, recommend_movies_c50[global_round])
-        # print 选择缓存电影结果
-        print(f' \nThe selected 50 caching movies after {global_round} global rounds:')
-        print(recommend_movies_c50[global_round])
-        cache_efficiency_c50[global_round] = cache_hit_ratio(test_dataset, recommend_movies_c50[global_round])
-        print(f' \nThe Cache Hit Ratio with cachesize 50 after {global_round} global rounds:')
-        print(f'Cache Hit Ratio : {cache_efficiency_c50[global_round]}')
-
-    # plt cache efficiency
-    plt.figure(figsize=(6, 6))
-    # 设置坐标轴范围、名称
-    plt.xlim(0, 10)
-    plt.ylim(0, 20)
-    plt.xlabel('Communication Round')
-    plt.ylabel('Cache Efficiency')
-    plt.title('Cache Efficiency vs Communication Round')
-    # FPCC
-    plt.plot(range(args.epochs+1), cache_efficiency_c50, color='red', linewidth=1.5, linestyle='-', label='FPCC')
-    plt.scatter(range(args.epochs+1), cache_efficiency_c50, s=50, marker='o', color='red')
-    plt.legend()
-    # plt.savefig(f"./save/{args.dataset}-CacheEfficiency_CommunicationRound.png")
-    plt.show()
 
     print('\n Total Run Time: {0:0.4f}'.format(time.time() - start_time))
