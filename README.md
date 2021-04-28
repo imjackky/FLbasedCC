@@ -15,7 +15,7 @@
 3.  pandas等
 
 #### 使用说明
-data文件夹解压ml-100k和ml-1m，运行main
+查看data文件夹中ml-100k和ml-1m是否完整，不完整则解压ml-100k和ml-1m到data文件夹，运行main
 
 #### 算法实现
 实现了基于联邦学习的边缘缓存算法，同时探讨了random caching、thompson sampling、m-e-greedy、oracle等算法
